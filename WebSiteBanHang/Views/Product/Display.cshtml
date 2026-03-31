@@ -1,0 +1,67 @@
+﻿@model WebSiteBanHang.Models.Product
+@inject WebSiteBanHang.Repositories.ICategoryRepository CategoryRepository
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0"><i class="bi bi-eye"></i> Product Details</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Name</label>
+                                <p class="form-control-plaintext">@Model.Name</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Price</label>
+                                <p class="form-control-plaintext">@Model.Price.ToString("C")</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Description</label>
+                                <p class="form-control-plaintext">@Model.Description</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Category</label>
+                                <p class="form-control-plaintext">
+                                    @{
+                                        var categoryTask = CategoryRepository.GetByIdAsync(Model.CategoryId);
+                                        var category = categoryTask.Result;
+                                        if (category != null)
+                                        {
+                                            @category.Name
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">Unknown Category</span>
+                                        }
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Image</label>
+                            <div class="text-center">
+                                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                                {
+                                    <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded shadow" style="max-width: 100%;" />
+                                }
+                                else
+                                {
+                                    <p class="form-control-plaintext">No image available</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
